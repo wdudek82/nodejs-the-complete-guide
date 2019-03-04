@@ -25,6 +25,8 @@ const requestHandler = (req, res) => {
 
       const message = parsedBody.split('=')[1];
       fs.writeFileSync('hello.txt', message, (err) => {
+        if (err) throw err;
+
         res.writeHead(302, {
           Location: '/foo',
         });
