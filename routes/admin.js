@@ -9,9 +9,9 @@ router.get('/add-product', (req, res, next) => {
 });
 
 // /admin/add-product => POST
-router.post('/product', (req, res, next) => {
+router.post('/add-product', (req, res, next) => {
   res.redirect('/');
-  console.log(`Product name: ${req.body.name}`);
+  console.log(req.body);
 });
 
 module.exports = router;
