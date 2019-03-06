@@ -14,10 +14,12 @@ app.use(express.static(path.resolve('public')));
 /* Routes */
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const productRoutes = require('./routes/product');
 const errorRoutes = require('./routes/error');
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(productRoutes);
 app.use(errorRoutes);
 
 /* Server Settings */

@@ -1,20 +1,32 @@
-const products = [];
+const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  console.log(products);
-  res.render('shop', { products, pageTitle: 'Shop', path: '/', activeShop: true });
+  Product.fetchAll()
+    .then((products) => {
+      console.log('Controller', products);
+
+      res.render('shop/product-list', {
+        path: '/products',
+        pageTitle: 'All Products',
+        products,
+      });
+    })
+    .catch(console.log);
 };
 
-exports.getAddProduct = (req, res, next) => {
-  res.render('add-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
-    activeAddProduct: true,
-  });
-};
+exports.getProductDetails = (req, res, next) => {
+  const productId = req.params.id;
 
-exports.postAddProduct = (req, res, next) => {
-  res.redirect('/');
-  products.push({ title: req.body.title });
-  console.log(req.body);
+  Product.getById(productId)
+    .then((product) => {
+      console.log('Product detail:', productId, product);
+
+      res.render('shop/product-detail', {
+        path: `/products/${productId}`,
+        pageTitle: `Product ${productId}`,
+        productId,
+        product,
+      });
+    })
+    .catch(console.log);
 };
