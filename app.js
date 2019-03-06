@@ -3,20 +3,22 @@ const express = require('express');
 
 const app = express();
 
+/* Templating Engine */
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const adminData = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-
+/* Middlewares */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 
-app.use('/admin', adminData.routes);
+/* Routes */
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorRoutes = require('./routes/error');
+
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(errorRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render('404', { pageTitle: 'Page Not Found' });
-});
-
+/* Server Settings */
 app.listen(3000);
