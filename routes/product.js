@@ -7,7 +7,10 @@ const router = express.Router();
 // /products => GET
 router.get('/products', productsController.getProducts);
 
-// /products/:id => GET
-router.get('/products/:id', productsController.getProductDetails);
+// /product/delete/:productId => DELETE
+// router.delete('/product/delete/:productId');
+
+// /products/:productId => GET
+router.get('/products/:productId', productsController.getProduct);
 
 module.exports = router;

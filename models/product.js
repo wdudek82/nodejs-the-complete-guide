@@ -21,22 +21,24 @@ module.exports = class Product {
   }
 
   async save() {
+    this.id = Math.random().toString();
     const products = await this.constructor.fetchAll();
 
     products.push(this);
-    fs.writeFile(productsFile, JSON.stringify(products), (err2) => {
-      if (err2) throw err2;
+    fs.writeFile(productsFile, JSON.stringify(products), (err) => {
+      if (err) throw err;
       console.log('The file has been saved!');
     });
   }
 
-  static getById(id) {
+  static findById(productId) {
     return getProductsFromFile()
       .then((products) => {
-        if (products.length > id) {
-          return products[id];
-        }
-        return { title: `No product with id ${id}` };
+        return products.find((product) => product.id === productId);
+        // if (products.length > id) {
+        //   return products[id];
+        // }
+        // return { title: `No product with id ${id}` };
       })
       .catch(console.log);
   }

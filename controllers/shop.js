@@ -1,9 +1,15 @@
 
+const Product = require('../models/product');
+
 exports.getShopIndex = (req, res, next) => {
-  res.render('shop/index', {
-    path: '/',
-    pageTitle: 'Main Page',
-  });
+  Product.fetchAll()
+    .then((products) => {
+      res.render('shop/index', {
+        path: '/',
+        pageTitle: 'Main Page',
+        products,
+      });
+    });
 };
 
 exports.getCart = (req, res, next) => {

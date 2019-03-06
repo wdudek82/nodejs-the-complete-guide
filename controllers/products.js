@@ -12,17 +12,18 @@ exports.getProducts = (req, res, next) => {
     .catch(console.log);
 };
 
-exports.getProductDetails = (req, res, next) => {
-  const productId = req.params.id;
+exports.getProduct = (req, res, next) => {
+  const { productId } = req.params;
 
-  Product.getById(productId)
+  Product.findById(productId)
     .then((product) => {
       console.log('Product detail:', productId, product);
 
-      res.render('shop/product-detail', {
-        path: `/products/${productId}`,
-        pageTitle: `Product ${productId}`,
-        productId,
+      if (!product) return res.redirect('/products');
+
+      return res.render('shop/product-detail', {
+        path: '/products',
+        pageTitle: `Product :: ${product.title}`,
         product,
       });
     })
