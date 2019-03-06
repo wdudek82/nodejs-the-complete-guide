@@ -17,8 +17,6 @@ exports.getProduct = (req, res, next) => {
 
   Product.findById(productId)
     .then((product) => {
-      console.log('Product detail:', productId, product);
-
       if (!product) return res.redirect('/products');
 
       return res.render('shop/product-detail', {

@@ -35,10 +35,6 @@ module.exports = class Product {
     return getProductsFromFile()
       .then((products) => {
         return products.find((product) => product.id === productId);
-        // if (products.length > id) {
-        //   return products[id];
-        // }
-        // return { title: `No product with id ${id}` };
       })
       .catch(console.log);
   }
