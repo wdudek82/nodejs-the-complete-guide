@@ -3,6 +3,11 @@ const express = require('express');
 
 const app = express();
 
+/* SQL Database */
+const db = require('./utils/database');
+
+db.execute('');
+
 /* Templating Engine */
 app.set('view engine', 'ejs');
 app.set('views', 'views');
