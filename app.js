@@ -1,7 +1,10 @@
 const path = require('path');
 const express = require('express');
 
+const { sequelize } = require('./utils/sequelize.js');
+
 const app = express();
+
 
 /* Templating Engine */
 app.set('view engine', 'ejs');
@@ -22,5 +25,10 @@ app.use(shopRoutes);
 app.use(productRoutes);
 app.use(errorRoutes);
 
-/* Server Settings */
-app.listen(3000);
+/* Database */
+sequelize.sync()
+  .then((result) => {
+    /* Server Settings */
+    app.listen(3000);
+  })
+  .catch();
