@@ -14,7 +14,8 @@ exports.postCreateOrUpdateProduct = (req, res, next) => {
   const { productId } = req.body;
 
   if (!productId) {
-    Product.create({
+    // Profile.create({ ... })
+    req.user.createProduct({
       title,
       imageUrl,
       description,
@@ -32,16 +33,18 @@ exports.postCreateOrUpdateProduct = (req, res, next) => {
         updProduct.description = description;
         updProduct.price = price;
         return product.save();
-      }).then(() => {
-      console.log('Product updated');
-      res.redirect('/admin/products');
-    })
+      })
+      .then(() => {
+        console.log('Product updated');
+        res.redirect('/admin/products');
+      })
       .catch(console.log);
   }
 };
 
 exports.getAdminProducts = (req, res, next) => {
-  Product.findAll()
+  // Product.findAll()
+  req.user.getProducts()
     .then((products) => {
       res.render('admin/products', {
         path: '/admin/products',
@@ -55,8 +58,9 @@ exports.getAdminProducts = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const { productId } = req.params;
 
-  Product.findByPk(productId)
-    .then((product) => {
+  // Product.findByPk(productId)
+  req.user.getProducts({ where: { id: productId } })
+    .then(([product]) => {
       if (!product) {
         res.redirect('/admin/products');
       }
