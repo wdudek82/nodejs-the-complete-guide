@@ -12,17 +12,32 @@ exports.getAddProduct = (req, res, next) => {
 exports.postCreateOrUpdateProduct = (req, res, next) => {
   const { title, imageUrl, description, price } = req.body;
   const { productId } = req.body;
-  Product.create({
-    title,
-    imageUrl,
-    description,
-    price,
-  })
-    .then((result) => {
+
+  if (!productId) {
+    Product.create({
+      title,
+      imageUrl,
+      description,
+      price,
+    }).then((result) => {
       console.log('Created Product');
       res.redirect('/admin/products');
+    }).catch(console.log);
+  } else {
+    Product.findByPk(productId)
+      .then((product) => {
+        const updProduct = product;
+        updProduct.title = title;
+        updProduct.imageUrl = imageUrl;
+        updProduct.description = description;
+        updProduct.price = price;
+        return product.save();
+      }).then(() => {
+      console.log('Product updated');
+      res.redirect('/admin/products');
     })
-    .catch(console.log);
+      .catch(console.log);
+  }
 };
 
 exports.getAdminProducts = (req, res, next) => {
@@ -58,6 +73,10 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const { productId } = req.body;
-  Product.destroy({ where: { id: productId } });
-  res.redirect('/admin/products');
+  Product.findByPk(productId)
+    .then((product) => {
+      console.log('Product deleted');
+      product.destroy();
+      res.redirect('/admin/products');
+    });
 };
