@@ -2,11 +2,11 @@ const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
-    .then((products) => {
+    .then(([rows, fieldData]) => {
       res.render('shop/product-list', {
         path: '/products',
         pageTitle: 'All Products',
-        products,
+        products: rows,
       });
     })
     .catch(console.log);
@@ -16,7 +16,8 @@ exports.getProduct = (req, res, next) => {
   const { productId } = req.params;
 
   Product.findById(productId)
-    .then((product) => {
+    .then(([rows]) => {
+      const product = rows[0];
       if (!product) return res.redirect('/products');
 
       return res.render('shop/product-detail', {

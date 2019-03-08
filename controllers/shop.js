@@ -17,10 +17,10 @@ exports.getCart = (req, res, next) => {
   Cart.getCart()
     .then((cart) => {
       Product.fetchAll()
-        .then((products) => {
+        .then(([rows, fieldData]) => {
           const cartProducts = [];
 
-          for (const product of products) {
+          for (const product of rows) {
             const cartProductData = cart.products.find((p) => p.id === product.id);
             if (cartProductData) {
               cartProducts.push({ ...product, quantity: cartProductData.quantity });
@@ -48,7 +48,7 @@ exports.postCart = (req, res, next) => {
       Cart.removeProduct(productId, product.price);
       res.redirect('/cart');
     } else {
-      Cart.addProduct(productId, product.price);
+      Cart.addProduct(productId);
       res.redirect('/products');
     }
   });

@@ -16,9 +16,9 @@ exports.postCreateOrUpdateProduct = (req, res, next) => {
   if (productId) {
     product.id = productId;
   }
-  product.save();
-
-  res.redirect('/admin/products');
+  product.save().then(() => {
+    res.redirect('/admin/products');
+  }).catch(console.log);
 };
 
 exports.getAdminProducts = (req, res, next) => {
