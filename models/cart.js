@@ -1,15 +1,15 @@
-const db = require('mysql2');
+const Sequelize = require('sequelize');
 
-module.exports = class Cart {
-  static addProduct(id) {
-    db.execute(`INSERT INTO cart (productId) VALUES (${id})`);
-  }
+const { sequelize } = require('../utils/sequelize');
 
-  static removeProduct(id) {
-    db.execute(`DELETE FROM cart WHERE id=${id}`);
-  }
+const Cart = sequelize.define('cart', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+});
 
-  static async getCart() {
-    return db.execute('SELECT * FROM cart');
-  }
-};
+
+module.exports = Cart;
