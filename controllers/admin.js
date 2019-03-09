@@ -32,7 +32,7 @@ exports.postCreateOrUpdateProduct = (req, res, next) => {
         updProduct.imageUrl = imageUrl;
         updProduct.description = description;
         updProduct.price = price;
-        return product.save();
+        return updProduct.save();
       })
       .then(() => {
         console.log('Product updated');

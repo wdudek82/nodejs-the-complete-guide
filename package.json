@@ -5,6 +5,7 @@
   "main": ".eslintrc.js",
   "dependencies": {
     "@types/express": "^4.16.1",
+    "@types/sequelize": "^4.27.41",
     "ejs": "^2.6.1",
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
