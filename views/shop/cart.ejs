@@ -42,7 +42,7 @@
                     <div class="card__actions">
                         <a href="#" class="btn">Checkout</a>
                         <form action="/cart/delete" method="POST">
-                            <input type="hidden" name="productId" value="<%= product.id %>" />
+                            <input type="hidden" name="productId" value="<%= product._id %>" />
                             <button class="btn" type="submit">Remove</button>
                         </form>
                     </div>
