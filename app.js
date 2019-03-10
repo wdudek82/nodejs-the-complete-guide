@@ -26,9 +26,19 @@ app.set('views', 'views');
  * Middlewares
  *
  */
-/* Middlewares */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
+app.use((req, res, next) => {
+  // User.findByPk(1)
+  //   .then((user) => {
+  //     req.user = user;
+  //     next();
+  //   })
+  //   .catch((err) => {
+  //     throw new Error(err);
+  //   });
+  next();
+});
 
 
 /**
