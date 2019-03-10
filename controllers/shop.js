@@ -14,11 +14,11 @@ exports.getShopIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user.getCart()
-    .then((cart) => {
-      return cart.getProducts();
-    })
     .then((products) => {
-      const totalPrice = products.reduce((acc, curVal) => acc + curVal.price, 0);
+      let totalPrice = 0;
+      for (const product of products) {
+        totalPrice += product.price * product.quantity;
+      }
 
       res.render('shop/cart', {
         path: '/cart',
@@ -32,28 +32,10 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const { productId } = req.body;
-  let fetchedCart;
-  let newQuantity = 1;
 
-  req.user.getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts({ where: { id: productId } });
-    })
-    .then((products) => {
-      const product = products[0];
-
-      if (product) {
-        newQuantity += product.cartItem.quantity;
-        console.log(newQuantity);
-        return 1;
-      }
-      return Product.findByPk(productId);
-    })
+  Product.findById(productId)
     .then((product) => {
-      fetchedCart.addProduct(product, {
-        through: { quantity: newQuantity },
-      });
+      return req.user.addToCart(product);
     })
     .then(() => {
       res.redirect('/cart');

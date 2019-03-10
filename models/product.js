@@ -34,8 +34,10 @@ class Product {
   }
 
   static findById(id) {
+    console.log(id);
     return getDb().collection('products')
-      .find({ _id: new ObjectId(id) });
+      .find({ _id: new ObjectId(id) })
+      .next();
   }
 
   static deleteById(id) {

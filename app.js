@@ -30,17 +30,15 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 app.use((req, res, next) => {
-  User.findById('5c8549ad925b6219a9682fd4')
+  User.findById('5baa2528563f16379fc8a610')
     .then((user) => {
-      let mainUser = user;
-      if (!mainUser) {
-        mainUser = new User('Max', 'Schwarzmuller', 'max@test.test');
-        mainUser.save();
+      if (!user) {
+        console.log('No user found!');
       }
-      req.user = mainUser;
+      req.user = new User(user.firstName, user.lastName, user.email, user.cart, user._id);
       next();
     })
-    .catch((err) => new Error(err));
+    .catch((err) => console.log(err));
 });
 
 
