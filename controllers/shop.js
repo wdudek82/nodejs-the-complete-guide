@@ -80,7 +80,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   req.user.getOrders({ include: [Product] })
     .then((orders) => {
-      console.log('Orders: ', orders);
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',

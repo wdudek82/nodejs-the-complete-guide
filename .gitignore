@@ -5,3 +5,4 @@
 .history
 utils/database.js
 /utils/sequelize.js
+/utils/mongodb-setup.js
