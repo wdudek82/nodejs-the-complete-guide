@@ -10,6 +10,7 @@ const app = express();
  *
  */
 const { mongoConnect } = require('./utils/mongodb-setup');
+const User = require('./models/user');
 
 
 /**
@@ -29,15 +30,17 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 app.use((req, res, next) => {
-  // User.findByPk(1)
-  //   .then((user) => {
-  //     req.user = user;
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     throw new Error(err);
-  //   });
-  next();
+  User.findById('5c8549ad925b6219a9682fd4')
+    .then((user) => {
+      let mainUser = user;
+      if (!mainUser) {
+        mainUser = new User('Max', 'Schwarzmuller', 'max@test.test');
+        mainUser.save();
+      }
+      req.user = mainUser;
+      next();
+    })
+    .catch((err) => new Error(err));
 });
 
 
@@ -65,4 +68,5 @@ app.use(errorRoutes);
 mongoConnect()
   .then(() => {
     app.listen(3000);
-  });
+  })
+  .catch((err) => new Error(err));
