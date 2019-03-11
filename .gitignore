@@ -6,3 +6,4 @@
 utils/database.js
 /utils/sequelize.js
 /utils/mongodb-setup.js
+/utils/mongoose-setup.js

@@ -9,8 +9,8 @@ const app = express();
  * Database
  *
  */
-const { mongoConnect } = require('./utils/mongodb-setup');
-const User = require('./models/user');
+const { mongooseSetup } = require('./utils/mongoose-setup');
+// const User = require('./models/user');
 
 
 /**
@@ -30,15 +30,17 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 app.use((req, res, next) => {
-  User.findById('5baa2528563f16379fc8a610')
-    .then((user) => {
-      if (!user) {
-        console.log('No user found!');
-      }
-      req.user = new User(user.firstName, user.lastName, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => console.log(err));
+  // User.findById('5baa2528563f16379fc8a610')
+  //   .then((user) => {
+  //     if (!user) {
+  //       console.log('No user found!');
+  //     }
+  //     req.user = new User(user.firstName, user.lastName, user.email, user.cart, user._id);
+  //     next();
+  //   })
+  //   .catch((err) => console.log(err));
+
+  next();
 });
 
 
@@ -63,7 +65,8 @@ app.use(errorRoutes);
  * Application Server
  *
  */
-mongoConnect()
+
+mongooseSetup()
   .then(() => {
     app.listen(3000);
   })
