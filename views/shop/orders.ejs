@@ -7,18 +7,13 @@
 
     <% if (orders.length > 0) { %>
         <div class="grid">
-            <!--<div class="center">-->
-            <!--<form action="/create-order" method="POST">-->
-            <!--<button class="btn" type="submit">Order Now!</button>-->
-            <!--</form>-->
-            <!--</div>-->
             <ul>
                 <% orders.forEach((order) => { %>
                     <li>
-                        <h1># <%= order._id %></h1>
+                        <h1>Order # <%= order._id %></h1>
                         <ul>
                             <% order.items.forEach((product) => { %>
-                                <li><%= product.productId %> (<%= product.quantity %>)</li>
+                                <li><%= product.title %> (<%= product.quantity %>)</li>
                             <% }) %>
                         </ul>
                     </li>

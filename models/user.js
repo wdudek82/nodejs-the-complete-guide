@@ -58,14 +58,17 @@ class User {
       .find({ _id: { $in: productIds } })
       .toArray()
       .then((products) => {
-        return products.map((p) => {
-          return {
-            ...p,
-            quantity: this.cart.items.find((i) => {
-              return i.productId.toString() === p._id.toString();
-            }).quantity,
-          };
-        });
+        return products
+          .map((p) => {
+            return {
+              ...p,
+              quantity: this.cart.items.find((i) => {
+                const isMatch = i.productId.toString() === p._id.toString();
+                const isEnough = i.quantity <= p.quantity;
+                return isMatch;
+              }).quantity,
+            };
+          });
       });
   }
 
@@ -82,26 +85,43 @@ class User {
   }
 
   addOrder() {
-    const order = {
-      items: this.cart.items,
-      user: {
-        _id: this._id,
-        name: this.name,
-        email: this.email,
-      },
-    };
+    return this.getCart()
+      .then((products) => {
+        const items = [];
 
-    return getDb().collection('orders')
-      .insertOne(this.cart)
-      .then((result) => {
-        this.cart = { items: [] };
-        this.save();
-      });
+        for (const item of this.cart.items) {
+          const product = products.find((p) => {
+            return p._id.toString() === item.productId.toString();
+          });
+          if (product) {
+            items.push(product);
+          }
+        }
+
+        return {
+          items,
+          user: {
+            _id: this._id,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+          },
+        };
+      })
+      .then((order) => {
+        return getDb().collection('orders')
+          .insertOne(order)
+          .then(() => {
+            this.cart = { items: [] };
+            this.save();
+          });
+      })
+      .catch((err) => new Error(err));
   }
 
-  static getOrders() {
+  getOrders() {
     return getDb().collection('orders')
-      .find()
+      .find({ 'user._id': new ObjectId(this._id) })
       .toArray();
   }
 
@@ -109,10 +129,9 @@ class User {
     return getDb().collection('users')
       .findOne({ _id: new ObjectId(id) })
       .then((user) => {
-        console.log(user);
         return user;
       })
-      .catch(console.log);
+      .catch((err) => new Error(err));
   }
 }
 
