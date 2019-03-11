@@ -15,7 +15,6 @@ exports.postAddProduct = (req, res, next) => {
 
   product.save()
     .then(() => {
-      console.log('Added product');
       res.redirect('/admin/products');
     })
     .catch((err) => {
@@ -30,13 +29,12 @@ exports.postCreateOrUpdateProduct = (req, res, next) => {
   new Product(title, price, description, imageUrl, productId)
     .save()
     .then(() => {
-      console.log('Product created/updated');
       res.redirect('/admin/products');
     }).catch((err) => new Error(err));
 };
 
 exports.getAdminProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render('admin/products', {
         path: '/admin/products',
@@ -70,9 +68,8 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const { productId } = req.body;
-  Product.deleteById(productId)
+  Product.deleteOne({ _id: productId })
     .then(() => {
-      console.log('Product deleted');
       res.redirect('/admin/products');
     })
     .catch((err) => new Error(err));
