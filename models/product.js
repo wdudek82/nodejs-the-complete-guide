@@ -17,15 +17,17 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 module.exports = {
   Product: model('Product', productSchema),
 };
 
-// const { ObjectId } = require('mongodb');
-// const { getDb } = require('../utils/mongodb-setup');
-//
 // class Product {
 //   constructor(title, price, description, imageUrl, id, userId) {
 //     this.title = title;
@@ -70,5 +72,3 @@ module.exports = {
 //       .deleteOne({ _id: new ObjectId(id) });
 //   }
 // }
-//
-// module.exports = Product;

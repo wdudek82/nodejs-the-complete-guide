@@ -7,15 +7,15 @@ const router = express.Router();
 // index => GET
 router.get('/', shopController.getShopIndex);
 
-// // /cart => GET
-// router.get('/cart', shopController.getCart);
-//
-// // /cart => POST
-// router.post('/cart', shopController.postCart);
-//
-// // /cart/delete => POST
-// router.post('/cart/delete', shopController.postCartDeleteProduct);
-//
+// /cart => GET
+router.get('/cart', shopController.getCart);
+
+// /cart => POST
+router.post('/cart', shopController.postCart);
+
+// /cart/delete => POST
+router.post('/cart/delete', shopController.postCartDeleteProduct);
+
 // // /create-order => POST
 // router.post('/create-order', shopController.postOrder);
 //

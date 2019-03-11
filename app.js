@@ -3,15 +3,13 @@ const express = require('express');
 
 const app = express();
 
-
 /**
  *
  * Database
  *
  */
 const { mongooseSetup } = require('./utils/mongoose-setup');
-// const User = require('./models/user');
-
+const { User } = require('./models/user');
 
 /**
  *
@@ -21,7 +19,6 @@ const { mongooseSetup } = require('./utils/mongoose-setup');
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-
 /**
  *
  * Middlewares
@@ -30,19 +27,27 @@ app.set('views', 'views');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('public')));
 app.use((req, res, next) => {
-  // User.findById('5baa2528563f16379fc8a610')
-  //   .then((user) => {
-  //     if (!user) {
-  //       console.log('No user found!');
-  //     }
-  //     req.user = new User(user.firstName, user.lastName, user.email, user.cart, user._id);
-  //     next();
-  //   })
-  //   .catch((err) => console.log(err));
-
-  next();
+  User.findOne()
+    .then((user) => {
+      if (!user) {
+        console.log('No user found!');
+        const newUser = new User({
+          _id: '5c86a91dee3f755886152cd5',
+          firstName: 'Max',
+          lastName: 'Schwarzmuller',
+          email: 'max@test.com',
+          cart: { items: [] },
+        });
+        return newUser.save();
+      }
+      return user;
+    })
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
 });
-
 
 /**
  *
@@ -58,7 +63,6 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(productRoutes);
 app.use(errorRoutes);
-
 
 /**
  *

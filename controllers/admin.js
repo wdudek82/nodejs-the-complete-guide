@@ -11,9 +11,16 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title, price, description, imageUrl } = req.body;
-  const product = new Product({ title, price, description, imageUrl });
+  const product = new Product({
+    title,
+    price,
+    description,
+    imageUrl,
+    userId: req.user._id,
+  });
 
-  product.save()
+  product
+    .save()
     .then(() => {
       res.redirect('/admin/products');
     })
@@ -22,15 +29,16 @@ exports.postAddProduct = (req, res, next) => {
     });
 };
 
-exports.postCreateOrUpdateProduct = (req, res, next) => {
+exports.postUpdateProduct = (req, res, next) => {
   const { title, imageUrl, description, price } = req.body;
   const { productId } = req.body;
+  const query = { _id: productId };
 
-  new Product(title, price, description, imageUrl, productId)
-    .save()
+  Product.update(query, { title, imageUrl, description, price })
     .then(() => {
       res.redirect('/admin/products');
-    }).catch((err) => new Error(err));
+    })
+    .catch((err) => new Error(err));
 };
 
 exports.getAdminProducts = (req, res, next) => {
