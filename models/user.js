@@ -69,6 +69,42 @@ class User {
       });
   }
 
+  deleteItemFromCart(id) {
+    this.cart.items
+      .map((cp) => {
+        const updCartProduct = cp;
+        if (updCartProduct.productId.toString() === id) {
+          updCartProduct.quantity -= 1;
+        }
+        return cp;
+      })
+      .filter((cp) => cp.quantity > 0);
+  }
+
+  addOrder() {
+    const order = {
+      items: this.cart.items,
+      user: {
+        _id: this._id,
+        name: this.name,
+        email: this.email,
+      },
+    };
+
+    return getDb().collection('orders')
+      .insertOne(this.cart)
+      .then((result) => {
+        this.cart = { items: [] };
+        this.save();
+      });
+  }
+
+  static getOrders() {
+    return getDb().collection('orders')
+      .find()
+      .toArray();
+  }
+
   static findById(id) {
     return getDb().collection('users')
       .findOne({ _id: new ObjectId(id) })
