@@ -56,7 +56,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
-      console.log('Orders', orders);
+      console.log('Orders', orders[0].products[0].productsData.title);
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
@@ -66,7 +66,6 @@ exports.getOrders = (req, res, next) => {
     .catch((err) => new Error(err));
 };
 
-// TODO: It's not working at the moment
 exports.postOrder = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
@@ -75,11 +74,9 @@ exports.postOrder = (req, res, next) => {
       const products = user.cart.items.map((i) => {
         return {
           quantity: i.quantity,
-          product: { ...i.productId._doc },
+          productsData: { ...i.productId._doc },
         };
       });
-
-      console.log('products', products);
 
       const order = new Order({
         user: {
@@ -90,14 +87,10 @@ exports.postOrder = (req, res, next) => {
         products,
       });
 
-      console.log('Foo', 'order');
-
-      return order.save();
+      order.save();
     })
     .then(() => {
-      console.log('Bar', 'order');
-      // return req.user.clearCart();
-      res.redirect('/');
+      return req.user.clearCart();
     })
     .then(() => {
       res.redirect('/orders');
