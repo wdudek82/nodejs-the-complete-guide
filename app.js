@@ -55,11 +55,13 @@ app.use((req, res, next) => {
  *
  */
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
 const productRoutes = require('./routes/product');
 const errorRoutes = require('./routes/error');
 
 app.use('/admin', adminRoutes);
+app.use(authRoutes);
 app.use(shopRoutes);
 app.use(productRoutes);
 app.use(errorRoutes);
@@ -69,7 +71,6 @@ app.use(errorRoutes);
  * Application Server
  *
  */
-
 mongooseSetup()
   .then(() => {
     app.listen(3000);
