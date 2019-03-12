@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   User.findOne()
     .then((user) => {
       if (!user) {
-        console.log('No user found!');
+        console.log('No user found! Creating new one');
         const newUser = new User({
           _id: '5c86a91dee3f755886152cd5',
           firstName: 'Max',

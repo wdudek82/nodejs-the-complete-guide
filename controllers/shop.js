@@ -1,4 +1,5 @@
 const { Product } = require('../models/product');
+const { Order } = require('../models/order');
 
 exports.getShopIndex = (req, res, next) => {
   Product.find()
@@ -53,9 +54,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
+  Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
+      console.log('Orders', orders);
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
@@ -65,9 +66,39 @@ exports.getOrders = (req, res, next) => {
     .catch((err) => new Error(err));
 };
 
+// TODO: It's not working at the moment
 exports.postOrder = (req, res, next) => {
   req.user
-    .addOrder()
+    .populate('cart.items.productId')
+    .execPopulate()
+    .then((user) => {
+      const products = user.cart.items.map((i) => {
+        return {
+          quantity: i.quantity,
+          product: { ...i.productId._doc },
+        };
+      });
+
+      console.log('products', products);
+
+      const order = new Order({
+        user: {
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          userId: req.user,
+        },
+        products,
+      });
+
+      console.log('Foo', 'order');
+
+      return order.save();
+    })
+    .then(() => {
+      console.log('Bar', 'order');
+      // return req.user.clearCart();
+      res.redirect('/');
+    })
     .then(() => {
       res.redirect('/orders');
     })

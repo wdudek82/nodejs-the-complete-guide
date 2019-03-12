@@ -16,12 +16,12 @@ router.post('/cart', shopController.postCart);
 // /cart/delete => POST
 router.post('/cart/delete', shopController.postCartDeleteProduct);
 
-// // /create-order => POST
-// router.post('/create-order', shopController.postOrder);
-//
-// // /orders => GET
-// router.get('/orders', shopController.getOrders);
-//
+// /create-order => POST
+router.post('/create-order', shopController.postOrder);
+
+// /orders => GET
+router.get('/orders', shopController.getOrders);
+
 // // /checkout => GET
 // router.get('/checkout', shopController.getCheckout);
 
